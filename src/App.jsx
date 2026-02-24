@@ -37,11 +37,19 @@ function App() {
     gsap.ticker.lagSmoothing(0);
 
     // 2. Hero "Lights On" Animation - Refined for Elegance
+    // Set initial hidden states via GSAP (not CSS) so cleanup reverts to visible
+    const ctx = gsap.context(() => {
+      gsap.set('.header', { opacity: 0, y: 20 });
+      gsap.set('.headline .word', { y: '115%' });
+      gsap.set('.bio-grid', { opacity: 0, y: 20 });
+      gsap.set('.cta-group', { opacity: 0, y: 20 });
+    }, containerRef);
+
     // Swapped "back.out" bounces for sharp, authoritative "expo.out" and "power3.out"
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
     tlRef.current = tl;
 
-    tl.to('.studio-light', { opacity: 0.15, duration: 2, ease: "power2.inOut" });
+    tl.to('.studio-light', { opacity: 0.15, duration: 0.6, ease: "power2.inOut" });
 
     // Tighter, more realistic LED flicker
     const flickerTl = gsap.timeline();
@@ -66,10 +74,10 @@ function App() {
       .to('.light-beam', { opacity: 0.03, mixBlendMode: 'normal', duration: 1 }, "-=1");
 
     // Refined Typography Stagger
-    tl.to('.header', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.2")
-      .to('.headline .word', { y: '0%', stagger: 0.05, duration: 1.2, ease: "expo.out" }, "-=1")
-      .to('.bio-grid', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=0.9")
-      .to('.cta-group', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1");
+    tl.to('.header', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.6")
+      .to('.headline .word', { y: '0%', stagger: 0.05, duration: 1.2, ease: "expo.out" }, "-=1.4")
+      .to('.bio-grid', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.3")
+      .to('.cta-group', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.4");
 
     // 3. Horizontal Scroll Pinning Logic
     if (horizontalRef.current) {
@@ -104,6 +112,7 @@ function App() {
     document.addEventListener('mousemove', handleMouseMove);
 
     return () => {
+      ctx.revert();
       tl.kill();
       lenis.destroy();
       ScrollTrigger.getAll().forEach(t => t.kill());
