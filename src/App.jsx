@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -15,18 +15,18 @@ function App() {
   const servicesRef = useRef(null);
   const footerRef = useRef(null);
 
+  const [activeService, setActiveService] = useState('v-commercial');
+
   useEffect(() => {
-    // 1. Initialize Lenis Smooth Scrolling
+    // 1. Initialize Lenis Smooth Scrolling for luxury feel
     const lenis = new Lenis({
-      duration: 1.5, // Slightly longer duration for a highly luxurious feel
+      duration: 1.6, // Longer duration for an elegant, heavy feel
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       direction: 'vertical',
       gestureDirection: 'vertical',
       smooth: true,
-      mouseMultiplier: 1,
+      mouseMultiplier: 0.8,
       smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
@@ -36,77 +36,101 @@ function App() {
     });
     gsap.ticker.lagSmoothing(0);
 
-    // 2. Hero "Lights On" Animation - Refined for Elegance
-    // Set initial hidden states via GSAP (not CSS) so cleanup reverts to visible
+    // 2. Hero "Lights On" Cinematic Intro Animation
     const ctx = gsap.context(() => {
-      gsap.set('.header', { opacity: 0, y: 20 });
+      gsap.set('.header', { opacity: 0, y: 30 });
       gsap.set('.headline .word', { y: '115%' });
-      gsap.set('.bio-grid', { opacity: 0, y: 20 });
-      gsap.set('.cta-group', { opacity: 0, y: 20 });
+      gsap.set('.bio-grid', { opacity: 0, y: 30 });
+      gsap.set('.cta-group', { opacity: 0, y: 30 });
     }, containerRef);
 
-    // Swapped "back.out" bounces for sharp, authoritative "expo.out" and "power3.out"
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
     tlRef.current = tl;
 
-    tl.to('.studio-light', { opacity: 0.15, duration: 0.6, ease: "power2.inOut" });
+    tl.to('.studio-light', { opacity: 0.1, duration: 0.6, ease: "power2.inOut" });
 
-    // Tighter, more realistic LED flicker
+    // Realistic LED flicker
     const flickerTl = gsap.timeline();
     flickerTl.to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.03 })
-      .to('.left .diffuser-screen', { fill: '#050505', duration: 0.05 })
+      .to('.left .diffuser-screen', { fill: '#0a0a0a', duration: 0.05 })
       .to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.04 })
-      .to('.left .diffuser-screen', { fill: '#050505', duration: 0.08 })
+      .to('.left .diffuser-screen', { fill: '#0a0a0a', duration: 0.08 })
       .to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.1 });
 
     flickerTl.to('.right .diffuser-screen', { fill: '#ffffff', duration: 0.04 }, 0.06)
-      .to('.right .diffuser-screen', { fill: '#050505', duration: 0.06 }, ">")
+      .to('.right .diffuser-screen', { fill: '#0a0a0a', duration: 0.06 }, ">")
       .to('.right .diffuser-screen', { fill: '#ffffff', duration: 0.1 }, "+=0.03");
 
     tl.add(flickerTl, "+=0.1");
-    tl.to('.light-beam', { opacity: 0.4, duration: 0.3, ease: "power2.out" }, "-=0.1");
+    tl.to('.light-beam', { opacity: 0.5, duration: 0.3, ease: "power2.out" }, "-=0.1");
 
-    // The Reveal: Wipes to elegant off-white
-    tl.to('.light-wipe', { scale: 3.5, opacity: 1, duration: 1.4, ease: "expo.out" }, "-=0.2")
+    // The Reveal Wipe
+    tl.to('.light-wipe', { scale: 3.5, opacity: 1, duration: 1.6, ease: "expo.out" }, "-=0.2")
       .to('.main-app', { backgroundColor: 'var(--bg-light)', duration: 0.1 }, "-=0.2")
       .to('.light-theme-bg', { opacity: 1, duration: 0.1 }, "-=0.2")
-      .to('.light-wipe', { opacity: 0, duration: 1, ease: "power2.out" }, ">")
-      .to('.light-beam', { opacity: 0.03, mixBlendMode: 'normal', duration: 1 }, "-=1");
+      .to('.light-wipe', { opacity: 0, duration: 1.2, ease: "power2.out" }, ">")
+      .to('.light-beam', { opacity: 0.02, mixBlendMode: 'normal', duration: 1 }, "-=1");
 
-    // Refined Typography Stagger
-    tl.to('.header', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.6")
-      .to('.headline .word', { y: '0%', stagger: 0.05, duration: 1.2, ease: "expo.out" }, "-=1.4")
-      .to('.bio-grid', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.3")
-      .to('.cta-group', { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, "-=1.4");
+    // Typography Stagger
+    tl.to('.header', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "-=1.8")
+      .to('.headline .word', { y: '0%', stagger: 0.06, duration: 1.4, ease: "expo.out" }, "-=1.6")
+      .to('.bio-grid', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "-=1.4")
+      .to('.cta-group', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "-=1.5");
 
-    // 3. Horizontal Scroll Pinning Logic
+    // 3. Horizontal Scroll Pinning & Internal Parallax Effect
     if (horizontalRef.current) {
       const horizontalSection = horizontalRef.current;
       const scrollCards = gsap.utils.toArray('.scroll-card');
+      const timelineOffset = 100 * (scrollCards.length - 1);
 
-      gsap.to(scrollCards, {
-        xPercent: -100 * (scrollCards.length - 1),
+      // Create scroll trigger for horizontal movement
+      const scrollTween = gsap.to(scrollCards, {
+        xPercent: -timelineOffset,
         ease: "none",
         scrollTrigger: {
           trigger: horizontalSection,
           pin: true,
-          scrub: 1,
+          scrub: 1.5, // Smoother scrub
           snap: 1 / (scrollCards.length - 1),
           start: "top top",
-          end: "+=3000"
+          end: "+=3500", // longer scroll distance
         }
+      });
+
+      // Internal Image Parallax during horizontal scroll
+      gsap.utils.toArray('.card-media img').forEach((img, i) => {
+        gsap.to(img, {
+          xPercent: 30, // move the image slightly opposite to scroll
+          ease: "none",
+          scrollTrigger: {
+            trigger: horizontalSection,
+            start: "top top",
+            end: "+=3500",
+            scrub: 1.5,
+          }
+        });
+      });
+
+      // Text reveals on horizontal scroll cards
+      scrollCards.forEach((card, i) => {
+        ScrollTrigger.create({
+          trigger: horizontalSection,
+          start: () => "top top-=" + (i * 1000 - 500),
+          end: () => "top top-=" + ((i + 1) * 1000),
+          toggleClass: { targets: card, className: "is-active" },
+        });
       });
     }
 
-    // 4. Parallax Hero Interactions (toned down multipliers for realism)
+    // 4. Parallax Hero Background Interactions
     const handleMouseMove = (e) => {
       if (window.innerWidth > 768) {
         const mouseX = (e.clientX / window.innerWidth) - 0.5;
         const mouseY = (e.clientY / window.innerHeight) - 0.5;
 
-        gsap.to('.studio-light.left', { rotation: -35 + (mouseX * 4), x: mouseX * 20, y: mouseY * 15, duration: 2, ease: "power3.out" });
-        gsap.to('.studio-light.right', { rotation: 35 + (mouseX * -4), x: mouseX * -20, y: mouseY * 10, duration: 2, ease: "power3.out" });
-        gsap.to('.bg-pattern', { x: mouseX * -15, y: mouseY * -15, duration: 2, ease: "power3.out" });
+        gsap.to('.studio-light.left', { rotation: -35 + (mouseX * 4), x: mouseX * 25, y: mouseY * 20, duration: 2.5, ease: "power3.out" });
+        gsap.to('.studio-light.right', { rotation: 35 + (mouseX * -4), x: mouseX * -25, y: mouseY * 15, duration: 2.5, ease: "power3.out" });
+        gsap.to('.bg-pattern', { x: mouseX * -20, y: mouseY * -20, duration: 2.5, ease: "power3.out" });
       }
     };
     document.addEventListener('mousemove', handleMouseMove);
@@ -120,26 +144,24 @@ function App() {
     };
   }, []);
 
-  // Magnetic bounds reduced to feel stiff & premium, not loose/bouncy
   const handleMagneticMove = (e, target) => {
     const rect = target.getBoundingClientRect();
     const x = (e.clientX - rect.left) - (rect.width / 2);
     const y = (e.clientY - rect.top) - (rect.height / 2);
 
-    gsap.to(target, { x: x * 0.15, y: y * 0.15, duration: 0.6, ease: "power3.out" });
+    gsap.to(target, { x: x * 0.2, y: y * 0.2, duration: 0.7, ease: "power3.out" });
     const text = target.querySelector('.btn-text');
-    if (text) gsap.to(text, { x: x * 0.08, y: y * 0.08, duration: 0.6, ease: "power3.out" });
+    if (text) gsap.to(text, { x: x * 0.1, y: y * 0.1, duration: 0.7, ease: "power3.out" });
   };
 
   const handleMagneticLeave = (target) => {
-    gsap.to(target, { x: 0, y: 0, duration: 0.8, ease: "expo.out" });
+    gsap.to(target, { x: 0, y: 0, duration: 0.9, ease: "expo.out" });
     const text = target.querySelector('.btn-text');
-    if (text) gsap.to(text, { x: 0, y: 0, duration: 0.8, ease: "expo.out" });
+    if (text) gsap.to(text, { x: 0, y: 0, duration: 0.9, ease: "expo.out" });
   };
 
-  const handleServiceHover = (e, videoId) => {
-    gsap.to('.service-video-preview', { opacity: 0, duration: 0.4 });
-    gsap.to(`#${videoId}`, { opacity: 1, duration: 0.5, ease: "power2.out" });
+  const handleServiceHover = (serviceId) => {
+    setActiveService(serviceId);
   };
 
   return (
@@ -158,7 +180,6 @@ function App() {
 
         <section className="hero-section">
           <div className="parallax-container">
-            {/* Minimalist sleek LED Panel Light Vectors */}
             <div className="studio-light left">
               <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                 <g className="fixture">
@@ -166,7 +187,6 @@ function App() {
                   <rect x="30" y="60" width="140" height="15" rx="2" fill="#0d0d0d" />
                   <path d="M 25 75 L 175 75 L 185 95 L 15 95 Z" fill="#0a0a0a" />
                   <path d="M 27 77 L 173 77 L 181 93 L 19 93 Z" className="diffuser-screen" fill="#050505" />
-                  {/* Subtle barn door lines for realism */}
                   <path d="M 15 95 L 0 130 M 185 95 L 200 130" stroke="#151515" strokeWidth="1.5" fill="none" />
                 </g>
               </svg>
@@ -190,11 +210,6 @@ function App() {
           <main className="hero-container">
             <header className="header">
               <div className="logo">
-                <svg className="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="50" cy="50" r="48" fill="#000" />
-                  <text x="50" y="72" fill="#fff" fontFamily="'Playfair Display', serif" fontSize="65" textAnchor="middle" fontStyle="italic">M</text>
-                  <line x1="18" y1="78" x2="82" y2="25" stroke="#fff" strokeWidth="2.5" />
-                </svg>
                 <span className="logo-text">mt_ent_</span>
               </div>
               <nav className="nav-links">
@@ -207,24 +222,23 @@ function App() {
             <div className="hero-content">
               <div className="text-wrapper">
                 <h1 className="headline" id="main-headline">
-                  <span className="line"><span className="word">Illuminating</span></span>
-                  <span className="line"><span className="word playfair">Your</span> <span className="word">Vision.</span></span>
+                  <span className="line"><span className="word">Cinematic</span> <span className="word playfair">craft</span></span>
+                  <span className="line"><span className="word">for</span> <span className="word">modern</span> <span className="word playfair">storytellers.</span></span>
                 </h1>
 
-                {/* Clean, editorial bio grid entirely replacing emojis */}
                 <div className="bio-grid">
-                  <div className="bio-item"><Film /><span>Cinematic Media</span></div>
-                  <div className="bio-item"><MapPin /><span>Melb South-East</span></div>
-                  <div className="bio-item"><Camera /><span>Sony A7 III</span></div>
-                  <div className="bio-item"><Eye /><span>View Latest Work</span></div>
+                  <div className="bio-item"><Film /><span>Director & DP</span></div>
+                  <div className="bio-item"><MapPin /><span>Global Operations</span></div>
+                  <div className="bio-item"><Camera /><span>ARRI Alexa Mini</span></div>
+                  <div className="bio-item"><Eye /><span>High Edit</span></div>
                 </div>
 
                 <div className="cta-group" id="cta-group">
                   <button className="cta-primary magnetic-btn" onMouseMove={(e) => handleMagneticMove(e, e.currentTarget)} onMouseLeave={(e) => handleMagneticLeave(e.currentTarget)}>
-                    <span className="btn-text">View the Reel</span>
+                    <span className="btn-text">View the Archive</span>
                   </button>
                   <button className="cta-secondary magnetic-btn" onMouseMove={(e) => handleMagneticMove(e, e.currentTarget)} onMouseLeave={(e) => handleMagneticLeave(e.currentTarget)}>
-                    <span className="btn-text">Work with Milan</span>
+                    <span className="btn-text">Collaborate</span>
                   </button>
                 </div>
               </div>
@@ -236,46 +250,48 @@ function App() {
         <section className="horizontal-section" ref={horizontalRef} id="portfolio">
           <div className="scroll-wrapper">
 
-            <div className="scroll-card">
+            <div className="scroll-card is-active">
               <div className="card-inner">
-                <div className="card-media mock-media gradient-1">
-                  {/* Monochromatic placeholders look more sophisticated */}
-                  <span className="mock-label">Team Spicemix</span>
+                <div className="card-media">
+                  <img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?q=80&w=2071&auto=format&fit=crop" alt="Commercial Reel" />
+                  <div className="card-overlay"></div>
                 </div>
                 <div className="card-info">
-                  <p className="card-role">Cinematography & Editing</p>
-                  <h2>M&M Feature</h2>
+                  <p className="card-role">Director of Photography</p>
+                  <h2>Commercial <br />Showcase</h2>
                 </div>
               </div>
             </div>
 
             <div className="scroll-card">
               <div className="card-inner">
-                <div className="card-media mock-media gradient-2">
-                  <span className="mock-label">Kazhugu Showcase</span>
+                <div className="card-media">
+                  <img src="https://images.unsplash.com/photo-1598387181032-a3103ea2714c?q=80&w=2078&auto=format&fit=crop" alt="Music Video Production" />
+                  <div className="card-overlay"></div>
                 </div>
                 <div className="card-info">
-                  <p className="card-role">VFX & Composition</p>
-                  <h2>The Fire Reveal</h2>
+                  <p className="card-role">Lighting & Color Grade</p>
+                  <h2>Neon Dreams <br />Music Video</h2>
                 </div>
               </div>
             </div>
 
             <div className="scroll-card">
               <div className="card-inner">
-                <div className="card-media mock-media gradient-3">
-                  <span className="mock-label">Wedding & Portraiture</span>
+                <div className="card-media">
+                  <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" alt="Wedding Film" />
+                  <div className="card-overlay"></div>
                 </div>
                 <div className="card-info">
-                  <p className="card-role">Photography Suite</p>
-                  <h2>Color & Emotion</h2>
+                  <p className="card-role">Event Cinematography</p>
+                  <h2>L&A Romance <br />Wedding Film</h2>
                 </div>
               </div>
             </div>
 
             <div className="scroll-card end-card">
               <div className="card-inner cta-inner">
-                <h2 className="massive-text">See the <br />Archive</h2>
+                <h2 className="massive-text">Full <br />Archive</h2>
                 <button className="cta-primary magnetic-btn view-all-btn" onMouseMove={(e) => handleMagneticMove(e, e.currentTarget)} onMouseLeave={(e) => handleMagneticLeave(e.currentTarget)}>
                   <span className="btn-text">Explore All Work</span>
                 </button>
@@ -285,33 +301,53 @@ function App() {
           </div>
         </section>
 
-        {/* --- SECTION 3: SERVICES KINETIC TYPOGRAPHY --- */}
+        {/* --- SECTION 3: SERVICES KINETIC SCROLL --- */}
         <section className="services-section" ref={servicesRef} id="services">
+          <div className="services-header">
+            <p>Our Offerings</p>
+            <h3>Studio Capabilities</h3>
+          </div>
           <div className="services-container">
 
-            <div className="media-preview-container">
-              <div id="v-commercial" className="service-video-preview gradient-1"></div>
-              <div id="v-music" className="service-video-preview gradient-2"></div>
-              <div id="v-wedding" className="service-video-preview gradient-3"></div>
-              <div id="v-brand" className="service-video-preview gradient-1"></div>
+            <div className="services-list">
+              <div className="service-item" onMouseEnter={() => handleServiceHover('v-commercial')}>
+                <span className="service-num">01</span>
+                <div>
+                  <h2 className="service-title">Commercial Film</h2>
+                </div>
+              </div>
+              <div className="service-item" onMouseEnter={() => handleServiceHover('v-music')}>
+                <span className="service-num">02</span>
+                <div>
+                  <h2 className="service-title">Music Videos</h2>
+                </div>
+              </div>
+              <div className="service-item" onMouseEnter={() => handleServiceHover('v-wedding')}>
+                <span className="service-num">03</span>
+                <div>
+                  <h2 className="service-title">Luxury Weddings</h2>
+                </div>
+              </div>
+              <div className="service-item" onMouseEnter={() => handleServiceHover('v-brand')}>
+                <span className="service-num">04</span>
+                <div>
+                  <h2 className="service-title">Brand Identity</h2>
+                </div>
+              </div>
             </div>
 
-            <div className="services-list">
-              <div className="service-item" onMouseEnter={(e) => handleServiceHover(e, 'v-commercial')} onMouseLeave={() => gsap.to('.service-video-preview', { opacity: 0 })}>
-                <span className="service-num">01</span>
-                <h2 className="service-title">Commercial Film</h2>
+            <div className="media-preview-container">
+              <div className={`service-media-preview ${activeService === 'v-commercial' ? 'active' : ''}`}>
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop" alt="Commercial" />
               </div>
-              <div className="service-item" onMouseEnter={(e) => handleServiceHover(e, 'v-music')} onMouseLeave={() => gsap.to('.service-video-preview', { opacity: 0 })}>
-                <span className="service-num">02</span>
-                <h2 className="service-title">Music Videos</h2>
+              <div className={`service-media-preview ${activeService === 'v-music' ? 'active' : ''}`}>
+                <img src="https://images.unsplash.com/photo-1594957973877-339ff7bdfeb6?q=80&w=2012&auto=format&fit=crop" alt="Music Video" />
               </div>
-              <div className="service-item" onMouseEnter={(e) => handleServiceHover(e, 'v-wedding')} onMouseLeave={() => gsap.to('.service-video-preview', { opacity: 0 })}>
-                <span className="service-num">03</span>
-                <h2 className="service-title">Weddings</h2>
+              <div className={`service-media-preview ${activeService === 'v-wedding' ? 'active' : ''}`}>
+                <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=2070&auto=format&fit=crop" alt="Wedding" />
               </div>
-              <div className="service-item" onMouseEnter={(e) => handleServiceHover(e, 'v-brand')} onMouseLeave={() => gsap.to('.service-video-preview', { opacity: 0 })}>
-                <span className="service-num">04</span>
-                <h2 className="service-title">Brand Identity</h2>
+              <div className={`service-media-preview ${activeService === 'v-brand' ? 'active' : ''}`}>
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop" alt="Brand Identity" />
               </div>
             </div>
 
@@ -324,27 +360,29 @@ function App() {
       {/* --- SECTION 4: REVEAL FOOTER --- */}
       <footer className="reveal-footer" id="contact" ref={footerRef}>
         <div className="footer-content">
-          <h2 className="footer-headline">Let's Create.</h2>
+          <div className="footer-top">
+            <h2 className="footer-headline">Let's <br />Create.</h2>
+          </div>
           <div className="footer-grid">
-            <div className="footer-col">
+            <div className="footer-col" style={{ gridColumn: 'span 2' }}>
               <h4>Inquiries</h4>
-              <a href="mailto:contact@milan.com" className="email-link">
-                contact@milan.com
+              <a href="mailto:hello@mt_ent.studio" className="email-link">
+                hello@mt_ent.studio
               </a>
             </div>
             <div className="footer-col">
               <h4>Socials</h4>
-              <a href="#" className="footer-link">Instagram</a>
-              <a href="#" className="footer-link">YouTube</a>
-              <a href="#" className="footer-link">TikTok</a>
+              <a href="https://instagram.com" className="footer-link">Instagram</a>
+              <a href="https://vimeo.com" className="footer-link">Vimeo</a>
+              <a href="https://youtube.com" className="footer-link">YouTube</a>
             </div>
             <div className="footer-col">
               <h4>Location</h4>
-              <p>Melbourne<br />South-East, AUS</p>
+              <p>Melbourne<br />South-East, AUS<br />Available Worlwide</p>
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2026 MT Entertainment. All rights reserved.</p>
+            <p>&copy; 2026 MT Entertainment. Visual Architecture.</p>
             <div className="small-logo">mt_ent_</div>
           </div>
         </div>
