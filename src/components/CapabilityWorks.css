@@ -1,0 +1,45 @@
+.capability-works-page {
+    min-height: 100vh;
+    background-color: var(--bg-light);
+    /* Enforce cream color */
+    color: var(--text-dark);
+    /* Enforce dark text */
+    position: relative;
+    z-index: 100;
+    /* Ensure it stays fully on top of the footer and main app layers */
+    padding-bottom: 120px;
+    /* Space before the sticky footer is revealed underneath */
+}
+
+.capability-works-content {
+    padding: 60px 4vw 100px 4vw;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.back-link {
+    color: var(--text-gray);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    display: inline-block;
+    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: var(--accent);
+}
+
+.capability-title {
+    text-transform: capitalize;
+    font-size: clamp(3rem, 6vw, 5rem);
+    margin-bottom: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+}

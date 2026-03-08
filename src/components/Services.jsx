@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
     const [activeService, setActiveService] = useState('photography');
@@ -16,30 +17,30 @@ const Services = () => {
             <div className="services-container">
 
                 <div className="services-list">
-                    <div className="service-item" onMouseEnter={() => handleServiceHover('photography')}>
+                    <Link to="/works/photography" className="service-item" onMouseEnter={() => handleServiceHover('photography')}>
                         <span className="service-num">01</span>
                         <div>
                             <h2 className="service-title">Photography</h2>
                         </div>
-                    </div>
-                    <div className="service-item" onMouseEnter={() => handleServiceHover('videography')}>
+                    </Link>
+                    <Link to="/works/videography" className="service-item" onMouseEnter={() => handleServiceHover('videography')}>
                         <span className="service-num">02</span>
                         <div>
                             <h2 className="service-title">Videography</h2>
                         </div>
-                    </div>
-                    <div className="service-item" onMouseEnter={() => handleServiceHover('cinematography')}>
+                    </Link>
+                    <Link to="/works/cinematography" className="service-item" onMouseEnter={() => handleServiceHover('cinematography')}>
                         <span className="service-num">03</span>
                         <div>
                             <h2 className="service-title">Cinematography</h2>
                         </div>
-                    </div>
-                    <div className="service-item" onMouseEnter={() => handleServiceHover('event-media')}>
+                    </Link>
+                    <Link to="/works/event-media" className="service-item" onMouseEnter={() => handleServiceHover('event-media')}>
                         <span className="service-num">04</span>
                         <div>
                             <h2 className="service-title">Event Media</h2>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="media-preview-container">

@@ -182,7 +182,7 @@ html.lenis body {
 .main-app {
   position: relative;
   z-index: 2;
-  background: var(--bg-dark);
+  background: transparent;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
 }
 

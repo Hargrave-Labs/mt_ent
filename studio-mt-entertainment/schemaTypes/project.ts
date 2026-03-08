@@ -40,6 +40,7 @@ export default defineType({
                 list: [
                     { title: 'Single Image', value: 'image' },
                     { title: 'Image Collage (2-3 photos)', value: 'image_collage' },
+                    { title: 'Project Gallery (Unlimited Images)', value: 'gallery' },
                     { title: 'Video', value: 'video' },
                 ],
                 layout: 'radio',
@@ -65,6 +66,16 @@ export default defineType({
             },
             validation: (Rule) => Rule.max(3),
             hidden: ({ document }) => document?.mediaType !== 'image_collage',
+        }),
+        defineField({
+            name: 'galleryImages',
+            title: 'Gallery Images',
+            type: 'array',
+            of: [{ type: 'image', options: { hotspot: true } }],
+            options: {
+                layout: 'grid',
+            },
+            hidden: ({ document }) => document?.mediaType !== 'gallery',
         }),
         defineField({
             name: 'video',
