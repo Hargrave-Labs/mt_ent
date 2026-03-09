@@ -24,7 +24,8 @@ body {
   width: 100%;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-dark);
-  color: var(--text-dark);
+  color: var(--text-light);
+  /* Changed to light default instead of dark */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -640,12 +641,12 @@ html.lenis body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3rem;
+  padding: 2rem;
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   aspect-ratio: auto;
   /* Remove rigid square aspect ratio */
-  min-height: 400px;
+  min-height: 250px;
 }
 
 /* Specific Grid Placements for Asymmetry */
@@ -653,7 +654,7 @@ html.lenis body {
   .photography-card {
     grid-column: span 7;
     grid-row: span 2;
-    min-height: 600px;
+    min-height: 380px;
   }
 
   .videography-card {
@@ -669,10 +670,27 @@ html.lenis body {
   .event-media-card {
     grid-column: span 12;
     grid-row: span 1;
-    min-height: 350px;
+    min-height: 250px;
     flex-direction: row;
     align-items: center;
   }
+}
+
+.service-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  z-index: 0;
+}
+
+.service-card.modern-card:hover .service-card-img {
+  transform: scale(1.05);
+  opacity: 0.6;
 }
 
 .service-card.modern-card:hover {
@@ -681,24 +699,6 @@ html.lenis body {
   transform: translateY(-8px);
 }
 
-.card-watermark {
-  position: absolute;
-  top: -2%;
-  left: -2%;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(8rem, 20vw, 25rem);
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.02);
-  line-height: 0.8;
-  z-index: 0;
-  pointer-events: none;
-  transition: color 0.6s ease;
-}
-
-.service-card.modern-card:hover .card-watermark {
-  color: rgba(210, 180, 140, 0.05);
-  /* Hint of accent color */
-}
 
 .card-content-layer {
   position: relative;
@@ -738,211 +738,7 @@ html.lenis body {
 }
 
 /* Adjust geometry for horizontal card */
-.event-media-card .card-content-layer.horizontal-content {
-  width: 40%;
-}
 
-.event-media-card .card-geometry-layer.row-geometry {
-  position: relative;
-  width: 60%;
-  height: 100%;
-}
-
-.card-geometry-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.geometry-background-noise {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
-  mix-blend-mode: overlay;
-  z-index: 1;
-}
-
-.geometry-svg {
-  width: 60%;
-  /* Take up most of the card */
-  max-width: 300px;
-  max-height: 300px;
-  overflow: visible;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
-  transform: scale(0.9);
-  opacity: 0.6;
-  z-index: 2;
-}
-
-/* Base states for specifically animated parts so they only animate on hover */
-.geometry-svg .spin-slow,
-.geometry-svg .pulse-slow,
-.geometry-svg .pulse-fast,
-.geometry-svg .scan-line,
-.geometry-svg .scan-head,
-.geometry-svg .film-strip-rotate,
-.geometry-svg .expand-ring-1,
-.geometry-svg .expand-ring-2,
-.geometry-svg .expand-ring-3 {
-  animation-play-state: paused;
-  /* Pause animations by default */
-  opacity: 0.3;
-  /* Dimmed state */
-  transition: opacity 0.5s ease;
-}
-
-/* Hover effects */
-.service-card:hover .geometry-svg {
-  transform: scale(1.05);
-  /* Slight pop on hover */
-  opacity: 1;
-}
-
-.service-card:hover .geometry-svg .spin-slow,
-.service-card:hover .geometry-svg .pulse-slow,
-.service-card:hover .geometry-svg .pulse-fast,
-.service-card:hover .geometry-svg .scan-line,
-.service-card:hover .geometry-svg .scan-head,
-.service-card:hover .geometry-svg .film-strip-rotate,
-.service-card:hover .geometry-svg .expand-ring-1,
-.service-card:hover .geometry-svg .expand-ring-2,
-.service-card:hover .geometry-svg .expand-ring-3 {
-  animation-play-state: running;
-  /* Start animation on parent hover */
-  opacity: 1;
-  /* Brighten specific elements */
-}
-
-/* Animations for Abstract SVGs */
-@keyframes spinSlow {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulseSlow {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-
-  50% {
-    transform: scale(1.05);
-    opacity: 0.4;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-}
-
-@keyframes pulseFast {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.5);
-    opacity: 0.5;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes scanLineAnim {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(100px);
-  }
-}
-
-@keyframes filterRotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  50% {
-    transform: rotate(5deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes ringExpand {
-  0% {
-    r: 30;
-    opacity: 1;
-  }
-
-  100% {
-    r: 120;
-    opacity: 0;
-  }
-}
-
-/* Apply specific animations */
-.spin-slow {
-  transform-origin: center;
-  animation: spinSlow 20s linear infinite;
-}
-
-.pulse-slow {
-  transform-origin: center;
-  animation: pulseSlow 4s ease-in-out infinite;
-}
-
-.pulse-fast {
-  transform-origin: center;
-  animation: pulseFast 1.5s ease-in-out infinite;
-}
-
-.scan-line,
-.scan-head {
-  animation: scanLineAnim 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-}
-
-.film-strip-rotate {
-  transform-origin: center;
-  animation: filterRotate 6s ease-in-out infinite;
-}
-
-.expand-ring-1 {
-  animation: ringExpand 4s linear infinite;
-}
-
-.expand-ring-2 {
-  animation: ringExpand 4s linear infinite 1.3s;
-}
-
-.expand-ring-3 {
-  animation: ringExpand 4s linear infinite 2.6s;
-}
-
-/* Obsolete Media Rules - Kept specific ones inside comments in case they are needed later */
 
 /* =========================================
    4. CONTACT REVEAL FOOTER
@@ -1129,4 +925,218 @@ html.lenis body {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* =========================================
+   3.5 LET'S CONNECT SECTION
+========================================= */
+.lets-connect-section {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  margin-bottom: 80vh;
+  /* Re-added to expose reveal-footer underneath */
+  overflow: hidden;
+  z-index: 25;
+}
+
+.lets-connect-noise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
+  mix-blend-mode: overlay;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.lets-connect-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+  padding: 4vw;
+}
+
+.lets-connect-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+.lets-connect-headline {
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.lets-connect-headline .serif-italic {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.massive-email-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 4rem;
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: border-color 0.4s ease;
+}
+
+.massive-email-btn:hover {
+  border-color: var(--text-light);
+}
+
+.massive-email-btn .btn-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 5;
+  transition: color 0.4s ease;
+}
+
+.massive-email-btn .btn-hover-fill {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--text-light);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.massive-email-btn:hover .btn-hover-fill {
+  transform: translateY(-100%);
+}
+
+.massive-email-btn:hover .btn-text {
+  color: var(--bg-dark);
+}
+
+.lets-connect-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.3;
+}
+
+.grid-line {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.grid-line.vertical {
+  width: 1px;
+  height: 100%;
+  top: 0;
+}
+
+.grid-line.horizontal {
+  width: 100%;
+  height: 1px;
+  left: 0;
+}
+
+.grid-line.line-1 {
+  left: 33.33%;
+}
+
+.grid-line.line-2 {
+  left: 66.66%;
+}
+
+.grid-line.line-3 {
+  top: 50%;
+}
+
+/* NEW MARQUEE & BUTTON GROUP */
+.lets-connect-marquee {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  transform: translateY(-50%);
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 0;
+  /* Behind content */
+  opacity: 0.05;
+  /* Barely visible */
+  pointer-events: none;
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee-slide 40s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-track span {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(8rem, 20vw, 30rem);
+  font-weight: 600;
+  line-height: 1;
+  padding-right: 5vw;
+}
+
+@keyframes marquee-slide {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-33.3333%);
+  }
+
+  /* Because there are 3 spans */
+}
+
+.connect-btn-group {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Modifier for secondary buttons */
+.massive-email-btn.outline-only {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.massive-email-btn.outline-only:hover {
+  border-color: var(--text-light);
 }

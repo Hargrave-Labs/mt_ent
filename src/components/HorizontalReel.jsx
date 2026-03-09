@@ -176,16 +176,6 @@ const HorizontalReel = () => {
                         </div>
                     );
                 })}
-
-                <div className="scroll-card end-card">
-                    <div className="card-inner cta-inner landscape">
-                        <h2 className="massive-text">Full <br />Archive</h2>
-                        <MagneticButton className="cta-primary view-all-btn">
-                            <span className="btn-text">Explore All Work</span>
-                        </MagneticButton>
-                    </div>
-                </div>
-
             </div>
         </section>
     );

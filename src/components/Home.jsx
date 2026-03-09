@@ -4,16 +4,18 @@ import Hero from './Hero';
 import AboutMT from './AboutMT';
 import HorizontalReel from './HorizontalReel';
 import Services from './Services';
+import LetsConnect from './LetsConnect';
 
 const Home = () => {
     useSmoothScroll();
 
     return (
-        <div className="home-content" style={{ backgroundColor: 'var(--bg-dark)', marginBottom: '80vh', position: 'relative', zIndex: 10 }}>
+        <div className="home-content">
             <Hero />
             <AboutMT />
             <HorizontalReel />
             <Services />
+            <LetsConnect />
         </div>
     );
 };
