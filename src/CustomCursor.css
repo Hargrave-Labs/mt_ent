@@ -4,7 +4,8 @@
     left: 0;
     width: 20px;
     height: 20px;
-    background-color: var(--text-dark);
+    background-color: #ffffff;
+    /* Must be white for perfect difference blending */
     border-radius: 50%;
     pointer-events: none;
     /* Crucial so cursor doesn't block clicks */

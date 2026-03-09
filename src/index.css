@@ -605,101 +605,344 @@ html.lenis body {
   color: var(--text-light);
 }
 
-.services-container {
+.services-container.bento-layout {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
 }
 
-.services-list {
-  width: 50%;
+.services-bento-grid.modern-asymmetric-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 0 2vw;
+}
+
+@media (min-width: 768px) {
+  .services-bento-grid.modern-asymmetric-grid {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, minmax(300px, auto));
+    gap: 2rem;
+  }
+}
+
+.service-card.modern-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  /* Subtle inner glass border */
+  border-radius: 24px;
+  /* Ultra-modern curves */
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  aspect-ratio: auto;
+  /* Remove rigid square aspect ratio */
+  min-height: 400px;
+}
+
+/* Specific Grid Placements for Asymmetry */
+@media (min-width: 768px) {
+  .photography-card {
+    grid-column: span 7;
+    grid-row: span 2;
+    min-height: 600px;
+  }
+
+  .videography-card {
+    grid-column: span 5;
+    grid-row: span 1;
+  }
+
+  .cinematography-card {
+    grid-column: span 5;
+    grid-row: span 1;
+  }
+
+  .event-media-card {
+    grid-column: span 12;
+    grid-row: span 1;
+    min-height: 350px;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.service-card.modern-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 30px 60px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px);
+}
+
+.card-watermark {
+  position: absolute;
+  top: -2%;
+  left: -2%;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(8rem, 20vw, 25rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.02);
+  line-height: 0.8;
+  z-index: 0;
+  pointer-events: none;
+  transition: color 0.6s ease;
+}
+
+.service-card.modern-card:hover .card-watermark {
+  color: rgba(210, 180, 140, 0.05);
+  /* Hint of accent color */
+}
+
+.card-content-layer {
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
-.service-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 3vw;
-  padding: 3.5vh 0;
-  border-top: 1px solid var(--border-dark);
-  color: var(--text-light);
-  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-  position: relative;
-}
-
-.service-item:last-child {
-  border-bottom: 1px solid var(--border-dark);
-}
-
-.service-item:hover {
-  opacity: 1;
-  transform: translateX(1vw);
-}
-
-.services-list:hover .service-item:not(:hover) {
-  opacity: 0.3;
-}
-
-.service-num {
+.modern-card-num {
   font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  opacity: 0.5;
-  margin-top: 1.2rem;
   color: var(--accent);
+  opacity: 0.9;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
-.service-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3rem, 5.5vw, 6rem);
+.modern-card-title {
+  font-family: 'Inter', sans-serif;
+  /* Ditching Serif for modern high-tech feel */
+  font-size: clamp(2rem, 3vw, 3.5rem);
   font-weight: 400;
-  font-style: italic;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  white-space: nowrap;
+  font-style: normal;
+  color: var(--text-light);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  /* Tight tracking */
 }
 
-.media-preview-container {
+/* Specific styling for the massive hero card footer */
+.card-footer-content {
   position: relative;
-  width: 45%;
-  height: 60vh;
-  margin-top: 2vh;
-  border-radius: 0;
-  overflow: hidden;
-  z-index: 0;
+  z-index: 10;
+  margin-top: auto;
 }
 
-.service-media-preview {
+/* Adjust geometry for horizontal card */
+.event-media-card .card-content-layer.horizontal-content {
+  width: 40%;
+}
+
+.event-media-card .card-geometry-layer.row-geometry {
+  position: relative;
+  width: 60%;
+  height: 100%;
+}
+
+.card-geometry-layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: scale(1.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
 }
 
-.service-media-preview.active {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-}
-
-.service-media-preview img,
-.service-media-preview video {
+.geometry-background-noise {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  filter: brightness(0.85);
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
+  mix-blend-mode: overlay;
+  z-index: 1;
 }
+
+.geometry-svg {
+  width: 60%;
+  /* Take up most of the card */
+  max-width: 300px;
+  max-height: 300px;
+  overflow: visible;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  transform: scale(0.9);
+  opacity: 0.6;
+  z-index: 2;
+}
+
+/* Base states for specifically animated parts so they only animate on hover */
+.geometry-svg .spin-slow,
+.geometry-svg .pulse-slow,
+.geometry-svg .pulse-fast,
+.geometry-svg .scan-line,
+.geometry-svg .scan-head,
+.geometry-svg .film-strip-rotate,
+.geometry-svg .expand-ring-1,
+.geometry-svg .expand-ring-2,
+.geometry-svg .expand-ring-3 {
+  animation-play-state: paused;
+  /* Pause animations by default */
+  opacity: 0.3;
+  /* Dimmed state */
+  transition: opacity 0.5s ease;
+}
+
+/* Hover effects */
+.service-card:hover .geometry-svg {
+  transform: scale(1.05);
+  /* Slight pop on hover */
+  opacity: 1;
+}
+
+.service-card:hover .geometry-svg .spin-slow,
+.service-card:hover .geometry-svg .pulse-slow,
+.service-card:hover .geometry-svg .pulse-fast,
+.service-card:hover .geometry-svg .scan-line,
+.service-card:hover .geometry-svg .scan-head,
+.service-card:hover .geometry-svg .film-strip-rotate,
+.service-card:hover .geometry-svg .expand-ring-1,
+.service-card:hover .geometry-svg .expand-ring-2,
+.service-card:hover .geometry-svg .expand-ring-3 {
+  animation-play-state: running;
+  /* Start animation on parent hover */
+  opacity: 1;
+  /* Brighten specific elements */
+}
+
+/* Animations for Abstract SVGs */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseSlow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulseFast {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scanLineAnim {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes filterRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes ringExpand {
+  0% {
+    r: 30;
+    opacity: 1;
+  }
+
+  100% {
+    r: 120;
+    opacity: 0;
+  }
+}
+
+/* Apply specific animations */
+.spin-slow {
+  transform-origin: center;
+  animation: spinSlow 20s linear infinite;
+}
+
+.pulse-slow {
+  transform-origin: center;
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+
+.pulse-fast {
+  transform-origin: center;
+  animation: pulseFast 1.5s ease-in-out infinite;
+}
+
+.scan-line,
+.scan-head {
+  animation: scanLineAnim 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+.film-strip-rotate {
+  transform-origin: center;
+  animation: filterRotate 6s ease-in-out infinite;
+}
+
+.expand-ring-1 {
+  animation: ringExpand 4s linear infinite;
+}
+
+.expand-ring-2 {
+  animation: ringExpand 4s linear infinite 1.3s;
+}
+
+.expand-ring-3 {
+  animation: ringExpand 4s linear infinite 2.6s;
+}
+
+/* Obsolete Media Rules - Kept specific ones inside comments in case they are needed later */
 
 /* =========================================
    4. CONTACT REVEAL FOOTER
