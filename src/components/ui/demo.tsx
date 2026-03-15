@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react';
 import LuxuryScrollVideo from './luxury-scroll-video';
-import { ChevronDown } from 'lucide-react';
 import { urlFor } from '../../context/GalleryCacheContext';
+import { getYouTubeThumbnail } from '../../lib/utils';
 
 const Demo = ({ items }: { items?: any[] }) => {
   useEffect(() => {
@@ -22,13 +22,17 @@ const Demo = ({ items }: { items?: any[] }) => {
         const isVideo = item.mediaType === 'video' && (item.video?.asset?.url || item.youtubeUrl);
         const imageSource = isVideo ? item.videoThumbnail : item.image;
         
-        // Use urlFor to generate a proper image URL with format and scaling
-        const bgImageSrc = imageSource?.asset?.url 
-          ? urlFor(imageSource).width(1920).auto('format').url() 
-          : 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=2070&auto=format&fit=crop';
+        let bgImageSrc = 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=2070&auto=format&fit=crop';
+        
+        if (imageSource?.asset?.url) {
+          bgImageSrc = urlFor(imageSource).width(1920).auto('format').url();
+        } else if (isVideo && item.youtubeUrl) {
+          const ytThumb = getYouTubeThumbnail(item.youtubeUrl);
+          if (ytThumb) bgImageSrc = ytThumb;
+        }
           
         const mediaSrc = isVideo ? (item.youtubeUrl || item.video?.asset?.url) : bgImageSrc;
-        const posterSrc = isVideo && imageSource?.asset?.url ? bgImageSrc : undefined;
+        const posterSrc = isVideo && (imageSource?.asset?.url || (isVideo && item.youtubeUrl)) ? bgImageSrc : undefined;
 
         if (!mediaSrc && !bgImageSrc) return null;
 

@@ -1,11 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import './CustomCursor.css';
 
 const CustomCursor = () => {
     const cursorRef = useRef(null);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     useEffect(() => {
+        // Check if device supports touch
+        setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
+    }, []);
+
+    useEffect(() => {
+        if (isTouchDevice) return;
+
         const cursor = cursorRef.current;
 
         // We use GSAP quickTo to make cursor follow mouse position incredibly performant
@@ -53,7 +61,9 @@ const CustomCursor = () => {
                 el.removeEventListener('mouseleave', handleMouseLeave);
             });
         };
-    }, []);
+    }, [isTouchDevice]);
+
+    if (isTouchDevice) return null;
 
     return <div ref={cursorRef} className="custom-cursor"></div>;
 };

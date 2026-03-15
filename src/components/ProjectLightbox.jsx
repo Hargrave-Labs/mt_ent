@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getYouTubeId } from '../lib/utils';
 import './ProjectLightbox.css';
 
 const ProjectLightbox = ({ project, onClose }) => {
@@ -9,6 +10,8 @@ const ProjectLightbox = ({ project, onClose }) => {
     let items = [];
     if (project?.mediaType === 'video' && project?.video?.asset?.url) {
         items = [{ type: 'video', url: project.video.asset.url }];
+    } else if (project?.mediaType === 'video' && project?.youtubeUrl) {
+        items = [{ type: 'youtube', url: project.youtubeUrl }];
     } else if (project?.mediaType === 'gallery' && project?.galleryImages) {
         items = project.galleryImages.map(img => ({ type: 'image', url: img.asset.url }));
     } else if (project?.mediaType === 'image_collage' && project?.images) {
@@ -92,6 +95,19 @@ const ProjectLightbox = ({ project, onClose }) => {
                                     className="lightbox-image"
                                     controls
                                     autoPlay
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                />
+                            ) : items[currentIndex]?.type === 'youtube' ? (
+                                <motion.iframe
+                                    key={currentIndex}
+                                    src={`https://www.youtube.com/embed/${getYouTubeId(items[currentIndex].url)}?autoplay=1&mute=0`}
+                                    className="lightbox-image"
+                                    allow="autoplay; fullscreen"
+                                    allowFullScreen
+                                    style={{ border: 'none' }}
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -20 }}

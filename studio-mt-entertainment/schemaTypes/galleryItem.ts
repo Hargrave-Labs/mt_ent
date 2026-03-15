@@ -74,9 +74,9 @@ export default defineType({
                 hotspot: true,
             },
             validation: (Rule) => Rule.custom((value, context) => {
-                const doc = context.document as unknown as { mediaType: string };
-                if (doc.mediaType === 'video' && !value) {
-                    return 'A thumbnail is required when the media type is Video';
+                const doc = context.document as unknown as { mediaType: string, youtubeUrl?: string };
+                if (doc.mediaType === 'video' && !value && !doc.youtubeUrl) {
+                    return 'A thumbnail is required for uploaded videos (optional for YouTube URLs).';
                 }
                 return true;
             }),

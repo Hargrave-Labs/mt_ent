@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { urlFor } from '../context/GalleryCacheContext';
+import { getYouTubeThumbnail } from '../lib/utils';
 import './MasonryGrid.css';
 
 const MasonryGridItem = ({ item, index }) => {
-    const isVideo = item.mediaType === 'video' && item.video?.asset?.url;
+    const isVideo = item.mediaType === 'video' && (item.video?.asset?.url || item.youtubeUrl);
                 
     // For videos, use the videoThumbnail if provided, else it falls back
     const imageSource = isVideo ? item.videoThumbnail : item.image;
@@ -16,9 +16,11 @@ const MasonryGridItem = ({ item, index }) => {
     // Original dimensions for preserving exact aspect ratio
     const dimensions = imageSource?.asset?.metadata?.dimensions;
     const aspectRatioString = dimensions ? `${dimensions.width} / ${dimensions.height}` : 'auto';
-
+    
     // Responsive sizing via Sanity builder (max 1200px width for 2-col spans)
-    const optimizedImageUrl = coverImage ? urlFor(imageSource).width(1200).auto('format').url() : null;
+    const optimizedImageUrl = coverImage 
+        ? urlFor(imageSource).width(1200).auto('format').url() 
+        : (isVideo && item.youtubeUrl ? getYouTubeThumbnail(item.youtubeUrl) : null);
 
     const innerRef = useRef(null);
     const [span, setSpan] = useState(20); // Fallback until measurement
@@ -60,7 +62,7 @@ const MasonryGridItem = ({ item, index }) => {
                     aspectRatio: aspectRatioString
                 }}
             >
-                {isVideo ? (
+                {isVideo && item.video?.asset?.url ? (
                     // Use the optimized poster image to save bandwidth before play
                     <video 
                         src={item.video.asset.url} 

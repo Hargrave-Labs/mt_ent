@@ -26,3 +26,16 @@ button,
 .magnetic-btn {
     cursor: none;
 }
+/* Hide custom cursor and restore default cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .custom-cursor {
+        display: none !important;
+    }
+
+    body,
+    a,
+    button,
+    .magnetic-btn {
+        cursor: auto !important;
+    }
+}

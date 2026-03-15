@@ -41,11 +41,11 @@ const Hero = () => {
                 gsap.set('.float-word', { opacity: 1, y: '0%' });
                 gsap.set('.bio-grid', { opacity: 1, y: 0 });
                 gsap.set('.cta-group', { opacity: 1, y: 0 });
-                gsap.set('.studio-light', { opacity: 0.1 });
+                gsap.set('.studio-light', { opacity: 0.4 });
                 gsap.set('.left .diffuser-screen', { fill: '#ffffff' });
-                gsap.set('.left .light-beam', { opacity: 0.5 });
+                gsap.set('.left .light-beam', { opacity: 0.8 });
                 gsap.set('.right .diffuser-screen', { fill: '#ffffff' });
-                gsap.set('.right .light-beam', { opacity: 0.5 });
+                gsap.set('.right .light-beam', { opacity: 0.8 });
                 gsap.set(document.querySelector('.home-content'), { backgroundColor: 'var(--bg-light)' });
                 gsap.set('.light-theme-bg', { opacity: 1, position: 'absolute' });
                 gsap.set('.light-wipe', { opacity: 0, scale: 3.5 });
@@ -63,54 +63,54 @@ const Hero = () => {
                     onComplete: () => sessionStorage.setItem('mt_intro_played', 'true')
                 });
 
-                tl.to('.studio-light', { opacity: 0.1, duration: 0.6, ease: "power2.inOut" });
+                tl.to('.studio-light', { opacity: 0.4, duration: 0.6, ease: "power2.inOut" });
 
                 // Realistic LED flicker
                 const flickerTl = gsap.timeline();
 
                 // Left light flicker - diffuser and beam in sync
                 flickerTl.to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.04 }, 0)
-                    .to('.left .light-beam', { opacity: 0.4, duration: 0.04 }, 0)
+                    .to('.left .light-beam', { opacity: 0.8, duration: 0.04 }, 0)
                     .to('.left .diffuser-screen', { fill: '#0a0a0a', duration: 0.08 }, ">")
                     .to('.left .light-beam', { opacity: 0, duration: 0.08 }, "<")
                     .to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.05 }, ">")
-                    .to('.left .light-beam', { opacity: 0.5, duration: 0.05 }, "<")
+                    .to('.left .light-beam', { opacity: 0.9, duration: 0.05 }, "<")
                     .to('.left .diffuser-screen', { fill: '#0a0a0a', duration: 0.12 }, ">")
                     .to('.left .light-beam', { opacity: 0, duration: 0.12 }, "<")
                     .to('.left .diffuser-screen', { fill: '#ffffff', duration: 0.1 }, ">")
-                    .to('.left .light-beam', { opacity: 0.5, duration: 0.1 }, "<");
+                    .to('.left .light-beam', { opacity: 1, duration: 0.1 }, "<");
 
                 // Right light flicker - slightly offset for realism
                 flickerTl.to('.right .diffuser-screen', { fill: '#ffffff', duration: 0.05 }, 0.08)
-                    .to('.right .light-beam', { opacity: 0.5, duration: 0.05 }, 0.08)
+                    .to('.right .light-beam', { opacity: 0.8, duration: 0.05 }, 0.08)
                     .to('.right .diffuser-screen', { fill: '#0a0a0a', duration: 0.1 }, ">")
                     .to('.right .light-beam', { opacity: 0, duration: 0.1 }, "<")
                     .to('.right .diffuser-screen', { fill: '#ffffff', duration: 0.06 }, "+=0.05")
-                    .to('.right .light-beam', { opacity: 0.6, duration: 0.06 }, "<")
+                    .to('.right .light-beam', { opacity: 0.9, duration: 0.06 }, "<")
                     .to('.right .diffuser-screen', { fill: '#0a0a0a', duration: 0.15 }, ">")
                     .to('.right .light-beam', { opacity: 0, duration: 0.15 }, "<")
                     .to('.right .diffuser-screen', { fill: '#ffffff', duration: 0.12 }, "+=0.05")
-                    .to('.right .light-beam', { opacity: 0.5, duration: 0.12 }, "<");
+                    .to('.right .light-beam', { opacity: 1, duration: 0.12 }, "<");
 
                 tl.add(flickerTl, "+=0.1");
 
                 // The Reveal Wipe
                 tl.addLabel("wipeStart", "-=0.2");
-                tl.to('.light-wipe', { scale: 3.5, opacity: 1, duration: 1.6, ease: "expo.out" }, "wipeStart")
-                    .to(document.querySelector('.home-content'), { backgroundColor: 'var(--bg-light)', duration: 0.1 }, "wipeStart+=0.3")
-                    .to('.light-theme-bg', { opacity: 1, duration: 0.1 }, "wipeStart+=0.3")
-                    .to('.light-wipe', { opacity: 0, duration: 1.2, ease: "power2.out" }, ">")
-                    .to('.light-beam', { opacity: 0.02, mixBlendMode: 'normal', duration: 1 }, "-=1")
+                tl.to('.light-wipe', { scale: 3.5, opacity: 1, duration: 2.5, ease: "expo.out" }, "wipeStart")
+                    .to(document.querySelector('.home-content'), { backgroundColor: 'var(--bg-light)', duration: 0.2 }, "wipeStart+=0.5")
+                    .to('.light-theme-bg', { opacity: 1, duration: 0.2 }, "wipeStart+=0.5")
+                    .to('.light-wipe', { opacity: 0, duration: 1.6, ease: "power2.out" }, ">")
+                    .to('.light-beam', { opacity: 0.02, mixBlendMode: 'normal', duration: 1.2 }, "-=1.2")
                     // After wipe: hide void-bg, show footer, make light-theme-bg absolute so it doesn't cover footer
                     .set(document.querySelector('.void-bg'), { opacity: 0 })
                     .set('.light-theme-bg', { position: 'absolute' })
                     .to(document.querySelector('.reveal-footer'), { opacity: 1, duration: 0.6, ease: 'power2.out' });
 
                 // Typography Stagger
-                tl.to('.header', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=0.8")
-                    .to('.float-word', { opacity: 1, y: '0%', stagger: 0.06, duration: 1.4, ease: "expo.out" }, "wipeStart+=0.9")
-                    .to('.bio-grid', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.1")
-                    .to('.cta-group', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.2");
+                tl.to('.header', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.2")
+                    .to('.float-word', { opacity: 1, y: '0%', stagger: 0.06, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.3")
+                    .to('.bio-grid', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.5")
+                    .to('.cta-group', { opacity: 1, y: 0, duration: 1.4, ease: "expo.out" }, "wipeStart+=1.6");
             }
 
             // 4. Parallax Hero Background Interactions
