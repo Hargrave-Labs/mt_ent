@@ -7,6 +7,9 @@ import MediaLoader from './MediaLoader';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const REEL_CACHE_KEY = 'mt_reel_projects_v1';
+const REEL_CACHE_TTL = 1000 * 60 * 60 * 12;
+
 const HorizontalReel = () => {
     const horizontalRef = useRef(null);
     const wrapperRef = useRef(null);
@@ -16,6 +19,23 @@ const HorizontalReel = () => {
     // 1. Fetch Projects from Sanity
     useEffect(() => {
         const fetchProjects = async () => {
+            const emitReady = () => {
+                window.__mtHorizontalReelReady = true;
+                window.dispatchEvent(new Event('mt:horizontal-reel-ready'));
+            };
+
+            try {
+                const cached = localStorage.getItem(REEL_CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    const isFresh = Date.now() - parsed.timestamp < REEL_CACHE_TTL;
+
+                    if (isFresh && Array.isArray(parsed.data)) {
+                        setProjects(parsed.data);
+                        return;
+                    }
+                }
+
             const query = `*[_type == "project"] | order(order asc) {
         _id,
         title,
@@ -29,6 +49,14 @@ const HorizontalReel = () => {
             const data = await client.fetch(query);
             console.log("SANITY DATA LOADED:", data);
             setProjects(data);
+                localStorage.setItem(
+                    REEL_CACHE_KEY,
+                    JSON.stringify({ data, timestamp: Date.now() })
+                );
+            } catch (error) {
+                console.error("Error fetching project reel:", error);
+                emitReady();
+            }
         };
         fetchProjects();
     }, []);
@@ -66,6 +94,16 @@ const HorizontalReel = () => {
     useEffect(() => {
         if (projects.length === 0) return; // Wait until cards are rendered
 
+        const emitReady = () => {
+            window.__mtHorizontalReelReady = true;
+            window.dispatchEvent(new Event('mt:horizontal-reel-ready'));
+        };
+
+        if (window.innerWidth < 768) {
+            emitReady();
+            return;
+        }
+
         let mm = gsap.matchMedia();
 
         mm.add("(min-width: 768px)", () => {
@@ -87,6 +125,11 @@ const HorizontalReel = () => {
                         end: () => `+=${scrollWrapper.scrollWidth - window.innerWidth}`,
                         invalidateOnRefresh: true
                     }
+                });
+
+                requestAnimationFrame(() => {
+                    ScrollTrigger.refresh();
+                    emitReady();
                 });
 
                 // Internal Image Parallax during horizontal scroll

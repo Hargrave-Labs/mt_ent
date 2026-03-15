@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import MasonryGrid from './MasonryGrid';
 import { useGalleryCache } from '../context/GalleryCacheContext';
@@ -21,13 +21,6 @@ const CapabilityWorks = () => {
     const categoryData = cache[categoryName] || { items: [], hasMore: true };
     const { items: galleryItems, hasMore } = categoryData;
     const isInitialLoad = galleryItems.length === 0 && hasMore;
-
-    useLayoutEffect(() => {
-        const timeoutId = setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 50);
-        return () => clearTimeout(timeoutId);
-    }, [capability]);
 
     // Initial fetch if empty
     useEffect(() => {
@@ -65,7 +58,7 @@ const CapabilityWorks = () => {
                 </div>
             ) : (
                 <div className="capability-works-content">
-                    <Link to="/" className="back-link">
+                    <Link to="/#services" className="back-link">
                         &larr; Back to Studio
                     </Link>
 

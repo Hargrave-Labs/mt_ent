@@ -190,6 +190,11 @@ html.lenis body {
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
 }
 
+html.hash-jump-pending .main-app,
+html.hash-jump-pending .reveal-footer {
+  visibility: hidden;
+}
+
 .hero-section {
   position: relative;
   z-index: 20;

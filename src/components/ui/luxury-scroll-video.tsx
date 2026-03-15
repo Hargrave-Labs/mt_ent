@@ -139,7 +139,7 @@ const LuxuryScrollVideo = ({
             className="absolute top-0 left-0 w-full z-50 pointer-events-auto flex items-center justify-between px-6 md:px-12 pt-10"
             style={{ opacity: headerOpacity }}
           >
-             <Link to="/" className="text-white/60 hover:text-white transition-colors duration-500 ease-out text-sm uppercase tracking-[0.2em] font-medium flex items-center gap-2 group">
+             <Link to="/#services" className="text-white/60 hover:text-white transition-colors duration-500 ease-out text-sm uppercase tracking-[0.2em] font-medium flex items-center gap-2 group">
                 <span className="transform transition-transform duration-500 group-hover:-translate-x-1">&larr;</span> Back to Studio
             </Link>
             

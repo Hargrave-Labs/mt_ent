@@ -7,6 +7,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SERVICES_CACHE_KEY = 'mt_services_capabilities_v1';
+const SERVICES_CACHE_TTL = 1000 * 60 * 60 * 12;
+
 const Services = () => {
     const headerRef = useRef(null);
     const [categoryImages, setCategoryImages] = useState({
@@ -17,8 +20,25 @@ const Services = () => {
     });
 
     useEffect(() => {
+        const emitReady = () => {
+            window.__mtServicesReady = true;
+            window.dispatchEvent(new Event('mt:services-ready'));
+        };
+
         const fetchImages = async () => {
             try {
+                const cached = localStorage.getItem(SERVICES_CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    const isFresh = Date.now() - parsed.timestamp < SERVICES_CACHE_TTL;
+
+                    if (isFresh && parsed.data) {
+                        setCategoryImages(parsed.data);
+                        emitReady();
+                        return;
+                    }
+                }
+
                 // Fetch the single 'studioCapabilities' document
                 const query = `*[_type == "studioCapabilities"][0] {
                     "photography": photographyImage.asset->url,
@@ -34,9 +54,16 @@ const Services = () => {
 
                 if (data) {
                     setCategoryImages(data);
+                    localStorage.setItem(
+                        SERVICES_CACHE_KEY,
+                        JSON.stringify({ data, timestamp: Date.now() })
+                    );
                 }
+
+                emitReady();
             } catch (error) {
                 console.error("Error fetching studio capabilities images:", error);
+                emitReady();
             }
         };
 
