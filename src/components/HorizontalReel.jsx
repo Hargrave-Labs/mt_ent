@@ -99,13 +99,16 @@ const HorizontalReel = () => {
             window.dispatchEvent(new Event('mt:horizontal-reel-ready'));
         };
 
-        if (window.innerWidth < 768) {
+        const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+        if (window.innerWidth < 768 || isTouch) {
             emitReady();
             return;
         }
 
         let mm = gsap.matchMedia();
 
+        // Only use GSAP ScrollTrigger pinning for desktop/pointers.
+        // Touch devices will use vertical scrolling stacked format via CSS.
         mm.add("(min-width: 768px)", () => {
             const ctx = gsap.context(() => {
                 const horizontalSection = horizontalRef.current;
@@ -132,7 +135,8 @@ const HorizontalReel = () => {
                     emitReady();
                 });
 
-                // Internal Image Parallax during horizontal scroll
+                // Internal Image Parallax during horizontal scroll (Removed to allow exact 100% media coverage)
+                /* 
                 gsap.utils.toArray('.scroll-card').forEach((card) => {
                     const media = card.querySelector('.parallax-media');
                     if (media) {
@@ -153,6 +157,7 @@ const HorizontalReel = () => {
                         );
                     }
                 });
+                */
             }, horizontalRef);
 
             return () => ctx.revert();
