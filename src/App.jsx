@@ -11,6 +11,10 @@ import './index.css';
 const ScrollToHash = () => {
   const { pathname, hash } = useLocation();
 
+  // Disable global Lenis on the cinematography page so CSS scroll snapping can work natively
+  const isCinematography = pathname.includes('/works/cinematography');
+  useSmoothScroll(!isCinematography);
+
   useLayoutEffect(() => {
     if (pathname !== '/' || hash !== '#services') return;
 
@@ -162,8 +166,6 @@ const ScrollToHash = () => {
 };
 
 function App() {
-  useSmoothScroll();
-
   return (
     <GalleryCacheProvider>
       <Router>

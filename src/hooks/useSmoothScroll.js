@@ -5,8 +5,10 @@ import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const useSmoothScroll = () => {
+const useSmoothScroll = (isActive = true) => {
     useEffect(() => {
+        if (!isActive) return;
+
         // Initialize Lenis Smooth Scrolling for luxury feel
         const lenis = new Lenis({
             duration: 1.6, // Longer duration for an elegant, heavy feel
@@ -34,7 +36,7 @@ const useSmoothScroll = () => {
             lenis.destroy();
             delete window.lenis;
         };
-    }, []);
+    }, [isActive]);
 };
 
 export default useSmoothScroll;
