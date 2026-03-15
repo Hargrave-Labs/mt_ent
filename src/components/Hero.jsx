@@ -206,8 +206,8 @@ const Hero = () => {
 
                             <div className="bio-grid">
                                 <div className="bio-item"><Film /><span>Director & DP</span></div>
-                                <div className="bio-item"><MapPin /><span>Global Operations</span></div>
-                                <div className="bio-item"><Camera /><span>ARRI Alexa Mini</span></div>
+                                <div className="bio-item"><MapPin /><span>Melbourne</span></div>
+                                <div className="bio-item"><Camera /><span>Sony A7 III</span></div>
                                 <div className="bio-item"><Eye /><span>High Edit</span></div>
                             </div>
 

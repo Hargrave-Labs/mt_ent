@@ -190,6 +190,9 @@ function App() {
           </Routes>
         </div>
 
+        {/* This spacer provides the natural scroll height to reveal the fixed footer below main-app */}
+        <div className="footer-spacer" style={{ height: '100vh', pointerEvents: 'none' }}></div>
+
         <Footer />
       </Router>
     </GalleryCacheProvider>

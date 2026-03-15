@@ -5,6 +5,8 @@ export const myStructure = (S: StructureBuilder, context: any) =>
   S.list()
     .title('Content')
     .items([
+      S.documentTypeListItem('companyInfo').title('Company Info'),
+      S.divider(),
       S.documentTypeListItem('project').title('Project (The Reel)'),
       S.documentTypeListItem('studioCapabilities').title('Studio Capabilities Images'),
       S.divider(),
