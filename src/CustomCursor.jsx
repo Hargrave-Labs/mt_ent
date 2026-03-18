@@ -20,10 +20,17 @@ const CustomCursor = () => {
         const setX = gsap.quickTo(cursor, "x", { duration: 0.15, ease: "power3" });
         const setY = gsap.quickTo(cursor, "y", { duration: 0.15, ease: "power3" });
 
+        let cursorVisible = false;
+
         const moveCursor = (e) => {
             // Offset by half the cursor size (20px width/height) to center it on mouse
             setX(e.clientX - 10);
             setY(e.clientY - 10);
+
+            if (!cursorVisible) {
+                cursorVisible = true;
+                cursor.style.opacity = '1';
+            }
         };
 
         window.addEventListener("mousemove", moveCursor);
