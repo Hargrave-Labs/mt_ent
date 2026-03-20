@@ -234,6 +234,10 @@
     overflow: hidden;
 }
 
+.vlb-player-wrapper:fullscreen {
+    border-radius: 0;
+}
+
 .video-lightbox-video {
     width: 100%;
     display: block;
@@ -241,6 +245,11 @@
     max-height: 75vh;
     object-fit: contain;
     cursor: pointer;
+}
+
+.vlb-player-wrapper:fullscreen .video-lightbox-video {
+    max-height: 100vh;
+    height: 100vh;
 }
 
 /* Center play button (YouTube red pill) */
