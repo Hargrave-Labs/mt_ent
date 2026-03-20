@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Camera, MapPin, Film, Eye } from 'lucide-react';
+import { MapPin, Film, Eye } from 'lucide-react';
 import gsap from 'gsap';
 import MagneticButton from './MagneticButton';
 import mtLogo from '../assets/MT_white.png';
@@ -227,7 +227,6 @@ const Hero = () => {
                             <div className="bio-grid">
                                 <div className="bio-item"><Film /><span>Director & DP</span></div>
                                 <div className="bio-item"><MapPin /><span>Melbourne</span></div>
-                                <div className="bio-item"><Camera /><span>Sony A7 III</span></div>
                                 <div className="bio-item"><Eye /><span>High Edit</span></div>
                             </div>
 
