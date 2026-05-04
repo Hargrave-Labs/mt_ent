@@ -10,6 +10,12 @@ export default {
       validation: (Rule: any) => Rule.required().email(),
     },
     {
+      name: 'phone',
+      title: 'Phone Number',
+      type: 'string',
+      description: 'Display format, e.g., "+61 422 080 939"',
+    },
+    {
       name: 'socials',
       title: 'Social Links',
       type: 'array',

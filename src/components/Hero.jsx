@@ -225,7 +225,7 @@ const Hero = () => {
                             </h1>
 
                             <div className="bio-grid">
-                                <div className="bio-item"><Film /><span>Director & DP</span></div>
+                                <div className="bio-item"><Film /><span>Cinematography</span></div>
                                 <div className="bio-item"><MapPin /><span>Melbourne</span></div>
                                 <div className="bio-item"><Eye /><span>High Edit</span></div>
                             </div>

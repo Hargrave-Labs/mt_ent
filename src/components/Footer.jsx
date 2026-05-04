@@ -4,7 +4,8 @@ import { client } from '../sanityClient';
 
 const Footer = () => {
     const [companyInfo, setCompanyInfo] = useState({
-        email: 'milan@mt-entertainment.com',
+        email: 'contact@mt-entertainment.com',
+        phone: '+61 422 080 939',
         socials: [
             { platform: 'Instagram', url: 'https://www.instagram.com/mt_ent_/' },
         ]
@@ -16,7 +17,8 @@ const Footer = () => {
                 const data = await client.fetch(`*[_type == "companyInfo"][0]`);
                 if (data) {
                     setCompanyInfo({
-                        email: data.email || 'milan@mt-entertainment.com',
+                        email: data.email || 'contact@mt-entertainment.com',
+                        phone: data.phone || '+61 422 080 939',
                         socials: data.socials || []
                     });
                 }
@@ -27,6 +29,8 @@ const Footer = () => {
 
         fetchCompanyInfo();
     }, []);
+
+    const phoneHref = `tel:${companyInfo.phone.replace(/\s+/g, '')}`;
 
     const scrollToTop = () => {
         if (window.lenis) {
@@ -67,7 +71,7 @@ const Footer = () => {
                     <div className="footer-col">
                         <span className="col-label">Contact</span>
                         <div className="social-links">
-                            <a href="tel:+6142208093" className="footer-link-text hover-underline">+61 422 080 93</a>
+                            <a href={phoneHref} className="footer-link-text hover-underline">{companyInfo.phone}</a>
                         </div>
                     </div>
                     
